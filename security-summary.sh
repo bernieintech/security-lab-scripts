@@ -29,6 +29,7 @@ count() { grep -c -- "$1" <<< "$logs" || true; }
   echo "Firewall blocks       : $(count 'UFW BLOCK')"
   echo "Successful logins     : $(count 'Accepted ')"
   echo "Invalid-user attempts : $(count 'Invalid user')"
+  echo "Sudo commands run     : $(count 'COMMAND=')"
   echo
   echo "Top blocked sources (count  source):"
   { grep 'UFW BLOCK' <<< "$logs" | grep -o 'SRC=[0-9.]*' | sort | uniq -c | sort -rn | head -n 5; } || echo "  none"
