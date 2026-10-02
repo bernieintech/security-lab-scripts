@@ -103,3 +103,17 @@ systemctl list-timers security-summary.timer
 ## Lab context
 
 Built in a Hyper-V lab on an isolated internal network: an Ubuntu Server host with key-only SSH and a default-deny firewall, and a Kali Linux VM used for authorized test scans against it.
+
+## Skills applied
+
+Concepts from the CompTIA and Cisco exam domains I have studied, and where each one shows up in this project.
+
+| Area | Concepts | Where in this project |
+|---|---|---|
+| Security+ | Least privilege, defense in depth, hardening, logging and monitoring, change management | `adm` group instead of root; key-only SSH with no root or password login; default-deny firewall; daily log report; every change reviewed through a pull request |
+| Network+ | Private addressing (RFC 1918), /24 subnetting, NAT, ports and protocols, documentation ranges (RFC 5737) | Isolated `10.x.x.0/24` lab network behind host NAT; SSH on 22/TCP; sample report uses `192.0.2.x` addresses |
+| Linux+ | systemd services and timers, permissions and ownership, groups, journald, SSH server configuration, Bash, Git | Sandboxed oneshot service and daily timer; `chmod 700` script; log reading with `journalctl`; `sshd_config.d` drop-in |
+| Server+ | Baselines, time synchronization, change control, snapshots for rollback | Before/after scan evidence; servers on UTC with NTP sync; Hyper-V checkpoints before every major change |
+| CCNA | ACL logic (first match, implicit deny), network segmentation | Single allow rule for SSH from the admin host, everything else denied; lab traffic kept on an internal virtual switch |
+| Pentest+ (studying) | Authorized scope, host discovery and port scanning, verification testing | Nmap scans only against my own lab hosts; open vs. filtered results used to prove the firewall works |
+| Scripting and automation | Defensive scripting, scheduling, version control | `set -euo pipefail` and explicit error checks; systemd timer; branch, pull request, and protected `main` |
