@@ -1,0 +1,12 @@
+[Unit]
+Description=Daily read-only security summary
+
+[Service]
+Type=oneshot
+User=magicbutu
+ExecStart=/home/magicbutu/scripts/security-summary.sh "24 hours ago"
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/magicbutu/evidence
+PrivateTmp=yes
