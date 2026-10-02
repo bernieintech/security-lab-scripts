@@ -24,7 +24,7 @@ count() { grep -c -- "$1" <<< "$logs" || true; }
 {
   echo "Security summary for $(hostname)"
   echo "Period : since $since"
-  echo "Created: $(date '+%F %T')"
+  echo "Created: $(date '+%F %T %Z')"
   echo
   echo "Firewall blocks       : $(count 'UFW BLOCK')"
   echo "Successful logins     : $(count 'Accepted ')"
