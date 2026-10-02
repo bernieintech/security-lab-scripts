@@ -17,8 +17,7 @@ if ! id -nG | grep -qwE 'adm|systemd-journal'; then
 fi
 
 mkdir -p "$report_dir"
-logs="$(journalctl --since "$since" --no-pager)"
-
+logs="$(journalctl --since "$since" --no-pager | grep -vE '^[^ ]+ [^ ]+ [^ ]+ [^ ]+ security-summary\.sh\[' || true)"
 count() { grep -c -- "$1" <<< "$logs" || true; }
 
 {
