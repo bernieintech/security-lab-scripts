@@ -117,3 +117,17 @@ Concepts from the CompTIA and Cisco exam domains I have studied, and where each 
 | CCNA | ACL logic (first match, implicit deny), network segmentation | Single allow rule for SSH from the admin host, everything else denied; lab traffic kept on an internal virtual switch |
 | Pentest+ (studying) | Authorized scope, host discovery and port scanning, verification testing | Nmap scans only against my own lab hosts; open vs. filtered results used to prove the firewall works |
 | Scripting and automation | Defensive scripting, scheduling, version control | `set -euo pipefail` and explicit error checks; systemd timer; branch, pull request, and protected `main` |
+
+## Live validation
+
+The warning rules were validated with authorized attacks inside the lab, generated from the Kali host and the admin workstation against the server. Source addresses are shown as `10.x.x.x`.
+
+| Simulated attack | Tool | Rule triggered | Result |
+|---|---|---|---|
+| Port scan of the top 100 TCP ports | `nmap --top-ports 100` from the Kali host | Possible port scan | Flagged: one source blocked on several distinct ports |
+| Six SSH logins with invalid usernames | `ssh` loop from the admin host | Possible brute force | Flagged: repeated invalid-user attempts from one source |
+
+Two details worth noting, both recorded as honest limitations rather than hidden:
+
+- **Firewall log rate-limiting.** The host firewall logs at a low rate by default, so a 100-port scan appears in the logs as far fewer blocked lines. The port-scan rule counts *distinct ports* seen, not total packets, so it still fires; but the blocked-packet count is a lower bound, not an exact total.
+- **System accounts vs. invalid users.** A login attempt for a real system account such as `root` is recorded differently from a truly unknown username, so a six-name attempt that includes `root` is counted as five invalid-user attempts. The brute-force threshold still triggers, but a future refinement should also count rejected system-account logins.
